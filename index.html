@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Valentine 💘</title>
-
 <style>
   body {
     height: 100vh;
@@ -71,7 +70,7 @@
   const yesBtn = document.getElementById("yes");
   const noBtn = document.getElementById("no");
 
-  // Initial NO button position
+  // Place NO button randomly within visible screen
   function placeNoRandom() {
     const padding = 20;
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
@@ -79,24 +78,23 @@
     noBtn.style.left = Math.random() * maxX + "px";
     noBtn.style.top = Math.random() * maxY + "px";
   }
-  placeNoRandom();
 
-  // NO button moves when cursor is near (desktop)
+  placeNoRandom(); // Initial position
+
+  // Move NO when mouse gets near (desktop)
   document.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(
-      e.clientX - (rect.left + rect.width / 2),
-      e.clientY - (rect.top + rect.height / 2)
+      e.clientX - (rect.left + rect.width/2),
+      e.clientY - (rect.top + rect.height/2)
     );
-    if (distance < 120) {
+    if(distance < 120){ // proximity threshold
       placeNoRandom();
     }
   });
 
-  // NO button moves on touch/click (mobile)
-  noBtn.addEventListener("touchstart", () => {
-    placeNoRandom();
-  });
+  // Move NO when touched (mobile)
+  noBtn.addEventListener("touchstart", placeNoRandom);
 
   // Floating hearts
   setInterval(() => {
@@ -111,15 +109,13 @@
 
   // YES click handler + music
   yesBtn.addEventListener("click", () => {
-    // Create and play music dynamically
     const audio = document.createElement("audio");
-    audio.src = "https://www.bensound.com/bensound-music/bensound-love.mp3"; 
+    audio.src = "https://www.bensound.com/bensound-music/bensound-love.mp3";
     audio.loop = true;
     audio.volume = 0.5;
-    audio.play().catch(e => console.log("Music playback prevented by browser.", e));
+    audio.play().catch(e => console.log("Music blocked", e));
     document.body.appendChild(audio);
 
-    // Show YES message
     document.body.innerHTML = `
       <h1>Great Choice! 😘🔥</h1>
       <h2>
