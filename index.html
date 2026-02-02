@@ -24,27 +24,22 @@
     margin-bottom: 30px;
   }
 
-  .buttons {
-    position: relative;
-    width: 320px;
-    height: 160px;
-  }
-
   button {
     padding: 15px 35px;
     font-size: 18px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    position: absolute;
   }
 
   #yes {
     background-color: #ff003c;
     color: white;
+    position: relative;
   }
 
   #no {
-    position: absolute;
     background-color: #555;
     color: white;
   }
@@ -68,32 +63,45 @@
 
 <h1>Suhashi 💕<br>Will you be my Valentine, Biwi ?</h1>
 
-<div class="buttons">
+<div style="position: relative; width: 100%; height: 200px;">
   <button id="yes" onclick="yesClicked()">Yes 💖</button>
-  <button id="no" onmouseover="moveNo()">No 🙈</button>
+  <button id="no">No 🙈</button>
 </div>
 
 <script>
-  function moveNo() {
-    const noBtn = document.getElementById("no");
-    const maxX = 260;
-    const maxY = 120;
+  const noBtn = document.getElementById("no");
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+  function moveNo() {
+    const padding = 20;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
   }
+
+  // Make NO impossible to click
+  ["mouseenter", "mousemove", "focus", "touchstart"].forEach(event => {
+    noBtn.addEventListener(event, moveNo);
+  });
+
+  // Initial position
+  moveNo();
 
   function yesClicked() {
     document.body.innerHTML = `
       <h1>Great Choice! 😘🔥</h1>
       <h2>
         Now remove your clothes, get into your hubby's favorite thongs and give your hubby a proper smooch.<br>
-        Ofcource your mouth, lips and tongue involved. 💋
+        Ofcource your mouth, lips and tongue involved. 💋 💋 💋
       </h2>
     `;
   }
 
-  // Floating hearts generator
+  // Floating hearts
   setInterval(() => {
     const heart = document.createElement("div");
     heart.className = "heart";
@@ -101,7 +109,6 @@
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.fontSize = (Math.random() * 20 + 10) + "px";
     document.body.appendChild(heart);
-
     setTimeout(() => heart.remove(), 6000);
   }, 300);
 </script>
