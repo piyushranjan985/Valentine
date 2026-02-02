@@ -1,100 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Valentine 💘</title>
-
-<style>
-  body {
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #ff758c, #ff7eb3);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-  }
-
-  h1 {
-    font-size: 2.4em;
-    margin-bottom: 30px;
-  }
-
-  button {
-    padding: 15px 35px;
-    font-size: 18px;
-    border: none;
-    border-radius: 10px;
-  }
-
-  #yes {
-    background-color: #ff003c;
-    color: white;
-    cursor: pointer;
-    z-index: 2;
-  }
-
-  /* 🔒 THE UNTOUCHABLE NO BUTTON */
-  #no {
-    background-color: #555;
-    color: white;
-    position: fixed;
-    pointer-events: none; /* impossible to click */
-    animation: escape 6s linear infinite;
-    z-index: 9999;
-  }
-
-  /* FULL-SCREEN MOVEMENT USING VIEWPORT UNITS */
-  @keyframes escape {
-    0%   { transform: translate(5vw, 10vh); }
-    15%  { transform: translate(80vw, 20vh); }
-    30%  { transform: translate(20vw, 75vh); }
-    45%  { transform: translate(70vw, 60vh); }
-    60%  { transform: translate(10vw, 50vh); }
-    75%  { transform: translate(85vw, 85vh); }
-    100% { transform: translate(5vw, 10vh); }
-  }
-
-  .heart {
-    position: absolute;
-    color: rgba(255,255,255,0.7);
-    font-size: 20px;
-    animation: float 6s linear infinite;
-  }
-
-  @keyframes float {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-800px); opacity: 0; }
-  }
-</style>
-</head>
-
-<body>
-
-<h1>Suhashi 💕<br>Will you be my Valentine, Biwi ?</h1>
-
-<button id="yes">Yes 💖</button>
-<button id="no">No 🙈</button>
-
-<!-- 🎶 BACKGROUND MUSIC (browser-safe) -->
-<audio id="bgMusic" loop autoplay muted>
-  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
-</audio>
-
 <script>
   const music = document.getElementById("bgMusic");
 
-  // Unmute music on first user interaction (required by browsers)
-  document.addEventListener("click", () => {
-    music.muted = false;
-    music.play();
-  }, { once: true });
-
+  // Play & unmute music when YES is clicked
   document.getElementById("yes").addEventListener("click", () => {
+    music.muted = false;      // unmute
+    music.play();             // start music
     document.body.innerHTML = `
       <h1>Great Choice! 😘🔥</h1>
       <h2>
@@ -104,17 +14,9 @@
     `;
   });
 
-  // Floating hearts
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (Math.random() * 20 + 10) + "px";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-  }, 300);
+  // Optional: also play music if user clicks anywhere else (before YES)
+  document.addEventListener("click", () => {
+    music.muted = false;
+    music.play();
+  }, { once: true });
 </script>
-
-</body>
-</html>
