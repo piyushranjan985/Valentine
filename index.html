@@ -30,21 +30,20 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    position: absolute;
   }
 
   #yes {
     background-color: #ff003c;
     color: white;
-    position: relative;
   }
 
   #no {
     background-color: #555;
     color: white;
+    position: fixed;   /* KEY: full viewport control */
+    z-index: 9999;
   }
 
-  /* Floating hearts */
   .heart {
     position: absolute;
     color: rgba(255,255,255,0.7);
@@ -63,33 +62,39 @@
 
 <h1>Suhashi 💕<br>Will you be my Valentine, Biwi ?</h1>
 
-<div style="position: relative; width: 100%; height: 200px;">
-  <button id="yes" onclick="yesClicked()">Yes 💖</button>
-  <button id="no">No 🙈</button>
-</div>
+<button id="yes" onclick="yesClicked()">Yes 💖</button>
+<button id="no">No 🙈</button>
 
 <script>
   const noBtn = document.getElementById("no");
 
-  function moveNo() {
+  function moveNoAnywhere() {
     const padding = 20;
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
-
-    noBtn.style.left = randomX + "px";
-    noBtn.style.top = randomY + "px";
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top  = Math.random() * maxY + "px";
   }
 
-  // Make NO impossible to click
-  ["mouseenter", "mousemove", "focus", "touchstart"].forEach(event => {
-    noBtn.addEventListener(event, moveNo);
+  // Move NO when cursor gets close
+  document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const distance = Math.hypot(
+      e.clientX - (rect.left + rect.width / 2),
+      e.clientY - (rect.top + rect.height / 2)
+    );
+
+    if (distance < 120) { // danger zone 😈
+      moveNoAnywhere();
+    }
   });
 
-  // Initial position
-  moveNo();
+  // Mobile touch protection
+  noBtn.addEventListener("touchstart", moveNoAnywhere);
+
+  // Initial random position
+  moveNoAnywhere();
 
   function yesClicked() {
     document.body.innerHTML = `
