@@ -29,19 +29,21 @@
     font-size: 18px;
     border: none;
     border-radius: 10px;
-    cursor: pointer;
   }
 
   #yes {
     background-color: #ff003c;
     color: white;
+    cursor: pointer;
+    z-index: 2;
   }
 
   #no {
     background-color: #555;
     color: white;
-    position: fixed;   /* KEY: full viewport control */
+    position: fixed;
     z-index: 9999;
+    pointer-events: none; /* 🔒 IMPOSSIBLE TO CLICK */
   }
 
   .heart {
@@ -77,23 +79,10 @@
     noBtn.style.top  = Math.random() * maxY + "px";
   }
 
-  // Move NO when cursor gets close
-  document.addEventListener("mousemove", (e) => {
-    const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(
-      e.clientX - (rect.left + rect.width / 2),
-      e.clientY - (rect.top + rect.height / 2)
-    );
+  // Move NO continuously (independent of mouse)
+  setInterval(moveNoAnywhere, 500); // every 0.5 sec 😈
 
-    if (distance < 120) { // danger zone 😈
-      moveNoAnywhere();
-    }
-  });
-
-  // Mobile touch protection
-  noBtn.addEventListener("touchstart", moveNoAnywhere);
-
-  // Initial random position
+  // Initial position
   moveNoAnywhere();
 
   function yesClicked() {
