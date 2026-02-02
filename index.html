@@ -38,12 +38,25 @@
     z-index: 2;
   }
 
+  /* 🔒 THE UNTOUCHABLE NO BUTTON */
   #no {
     background-color: #555;
     color: white;
     position: fixed;
+    pointer-events: none; /* impossible to click */
+    animation: escape 6s linear infinite;
     z-index: 9999;
-    pointer-events: none; /* 🔒 IMPOSSIBLE TO CLICK */
+  }
+
+  /* FULL-SCREEN MOVEMENT USING VIEWPORT UNITS */
+  @keyframes escape {
+    0%   { transform: translate(5vw, 10vh); }
+    15%  { transform: translate(80vw, 20vh); }
+    30%  { transform: translate(20vw, 75vh); }
+    45%  { transform: translate(70vw, 60vh); }
+    60%  { transform: translate(10vw, 50vh); }
+    75%  { transform: translate(85vw, 85vh); }
+    100% { transform: translate(5vw, 10vh); }
   }
 
   .heart {
@@ -64,28 +77,24 @@
 
 <h1>Suhashi 💕<br>Will you be my Valentine, Biwi ?</h1>
 
-<button id="yes" onclick="yesClicked()">Yes 💖</button>
+<button id="yes">Yes 💖</button>
 <button id="no">No 🙈</button>
 
+<!-- 🎶 BACKGROUND MUSIC (browser-safe) -->
+<audio id="bgMusic" loop autoplay muted>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-  const noBtn = document.getElementById("no");
+  const music = document.getElementById("bgMusic");
 
-  function moveNoAnywhere() {
-    const padding = 20;
-    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+  // Unmute music on first user interaction (required by browsers)
+  document.addEventListener("click", () => {
+    music.muted = false;
+    music.play();
+  }, { once: true });
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top  = Math.random() * maxY + "px";
-  }
-
-  // Move NO continuously (independent of mouse)
-  setInterval(moveNoAnywhere, 500); // every 0.5 sec 😈
-
-  // Initial position
-  moveNoAnywhere();
-
-  function yesClicked() {
+  document.getElementById("yes").addEventListener("click", () => {
     document.body.innerHTML = `
       <h1>Great Choice! 😘🔥</h1>
       <h2>
@@ -93,7 +102,7 @@
         Ofcource your mouth, lips and tongue involved. 💋 💋 💋
       </h2>
     `;
-  }
+  });
 
   // Floating hearts
   setInterval(() => {
